@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <style>
+      body {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #testDiagram {
+        height: 50%;
+        width: 50%;
+        border: 1px solid #dedede;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1. Create placeholder div DOM -->
+    <div id="testDiagram"></div>
+    <script src="https://unpkg.com/gojs/release/go.js"></script>
+    <script>
+      var $ = go.GraphObject.make;
+
+      // 2. Create diagram.
+      var diagram = $(go.Diagram, "testDiagram")
+
+      // 3. Create and bind template
+      diagram.nodeTemplate =
+        $(go.Node, "Auto",  // the Shape automatically fits around the TextBlock
+          $(go.Shape, "RoundedRectangle",  // use this kind of figure for the Shape
+            // bind Shape.fill to Node.data.color
+            new go.Binding("fill", "color")),
+          $(go.TextBlock,
+            { margin: 3 },  // some room around the text
+            // bind TextBlock.text to Node.data.key
+            new go.Binding("text", "key"))
+        );
+
+      // 4. Create and bind model
+      // the Model holds only the essential information describing the diagram
+      diagram.model = new go.GraphLinksModel(
+      [ // a JavaScript Array of JavaScript objects, one per node;
+        // the "color" property is added specifically for this app
+        { key: "Alpha", color: "lightblue" },
+        { key: "Beta", color: "orange" },
+        { key: "Gamma", color: "lightgreen" },
+        { key: "Delta", color: "pink" }
+      ],
+      [ // a JavaScript Array of JavaScript objects, one per link
+        { from: "Alpha", to: "Beta" },
+        { from: "Alpha", to: "Gamma" },
+        { from: "Beta", to: "Beta" },
+        { from: "Gamma", to: "Delta" },
+        { from: "Delta", to: "Alpha" }
+      ]);
+    </script>
+  </body>
+</html>
